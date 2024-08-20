@@ -1,12 +1,16 @@
 const mongoose = require("mongoose");
 
 const schema = mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"users"
+    },
     latitude: {
-        type: Number, // Changed to Number
+        type: Number, 
         required: true
     },
     longitude: {
-        type: Number, // Changed to Number
+        type: Number,
         required: true
     },
     radius: {

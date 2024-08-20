@@ -134,6 +134,39 @@ app.post("/signin",async(req,res)=>{
     ).catch()
 })
 
+app.post("/getAlerts", async (req, res) => {
+    let token = req.headers.token;
+    jwt.verify(token, "CivicApp", async (error, decoded) => {
+        if (decoded) {
+            try {
+                let alerts = await alertModel.find({ type: { $in: ["traffic", "animal", "construction"] } });
+                res.json({ "status": "success", "alerts": alerts });
+            } catch (error) {
+                res.json({ "status": "error", "error": error });
+            }
+        } else {
+            res.json({ "status": "invalid authentication" });
+        }
+    });
+});
+
+app.post("/getGeofences", async (req, res) => {
+    let token = req.headers.token;
+    jwt.verify(token, "CivicApp", async (error, decoded) => {
+        if (decoded) {
+            try {
+                let geofences = await alertModel.find({ type: "geofence" });
+                res.json({ "status": "success", "geofences": geofences });
+            } catch (error) {
+                res.json({ "status": "error", "error": error });
+            }
+        } else {
+            res.json({ "status": "invalid authentication" });
+        }
+    });
+});
+
+
 app.listen(3030, () => {
     console.log("Server started")
 })
